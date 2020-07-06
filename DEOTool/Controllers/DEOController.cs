@@ -129,8 +129,10 @@ namespace DEOTool.Controllers
 
 
             List<LinkData> links = new List<LinkData>();
-            //links.AddRange(await GoogleSearch(searchVM.Keyword));
+            links.AddRange(await GoogleSearch(searchVM.Keyword));
             links.AddRange(await YahooSearch(searchVM.Keyword));
+            //links.AddRange(await BingSearch(searchVM.Keyword));
+            links.AddRange(await AskSearch(searchVM.Keyword));
             return DownloadLinks(links);
         }
 
@@ -155,17 +157,50 @@ namespace DEOTool.Controllers
         public async Task<List<LinkData>> YahooSearch(string Keyword)
         {
             const string SearchEngineName = "Yahoo";
-            const string GoogleRegExString = "<span class=\" fz-ms fw-m fc-12th wr-bw lh-17\">.*?</span>";
-            List<LinkData> GoogleLinks = new List<LinkData>();
-            HttpClient GoogleClient = new HttpClient();
+            const string YahooRegExString = "<span class=\"fz-ms fw-m fc-12th wr-bw lh-17\">.*?</span>";
+            List<LinkData> YahooLinks = new List<LinkData>();
+            HttpClient YahooClient = new HttpClient();
             int pageNo = 0;
             for (int i = 1; i < 20; i++)
             {
                 pageNo = (i - 1) * 10;
-                string googleSearchResult = await GetGoogleResult(GoogleClient, Keyword, pageNo);
-                await LinkExtractor(googleSearchResult, GoogleRegExString, SearchEngineName, GoogleLinks);
+                string YahooSearchResult = await GetYahooResult(YahooClient, Keyword, pageNo);
+                await LinkExtractor(YahooSearchResult, YahooRegExString, SearchEngineName, YahooLinks);
             }
-            return GoogleLinks;
+            return YahooLinks;
+        }
+
+        public async Task<List<LinkData>> BingSearch(string Keyword)
+        {
+            const string SearchEngineName = "Bing";
+            //const string BingRegExString = "<div class=\"b_attribution\" .*><cite>.*?</cite>";
+            const string BingRegExString = "<div class=\"b_attribution\" .*><cite>.*?</cite>.*<a href=\"#\" class=\"trgr_icon\"";
+            List<LinkData> BingLinks = new List<LinkData>();
+            HttpClient BingClient = new HttpClient();
+            int pageNo = 0;
+            for (int i = 1; i < 20; i++)
+            {
+                pageNo = (i - 1) * 10;
+                string BingSearchResult = await GetBingResult(BingClient, Keyword, pageNo);
+                await LinkExtractor(BingSearchResult, BingRegExString, SearchEngineName, BingLinks);
+            }
+            return BingLinks;
+        }
+
+        public async Task<List<LinkData>> AskSearch(string Keyword)
+        {
+            const string SearchEngineName = "Ask";
+            const string AskRegExString = "<p class=\"PartialSearchResults-item-url\">.*?</p>";
+            List<LinkData> AskLinks = new List<LinkData>();
+            HttpClient AskClient = new HttpClient();
+            int pageNo = 0;
+            for (int i = 1; i < 20; i++)
+            {
+                pageNo = (i - 1) * 10;
+                string AskSearchResult = await GetAskResult(AskClient, Keyword, pageNo);
+                await LinkExtractor(AskSearchResult, AskRegExString, SearchEngineName, AskLinks);
+            }
+            return AskLinks;
         }
 
         public FileContentResult DownloadLinks(List<LinkData> links, string SearchResultFileName = "")
