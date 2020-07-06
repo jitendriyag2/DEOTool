@@ -3,3 +3,6 @@
 ################################################################################
 
 /DEOTool/bin/Debug/netcoreapp3.1
+/DEOTool/obj/Debug/netcoreapp3.1/Razor/Views
+/DEOTool/obj/Debug/netcoreapp3.1/staticwebassets
+/DEOTool/obj/Debug/netcoreapp3.1

@@ -50,7 +50,7 @@ namespace DEOTool
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=DEO}/{action=GetSearchLinks}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

@@ -1,6 +1,6 @@
 ﻿@model List<DEOTool.Controllers.LinkData>
 
-<a href="/">Back</a>
+<a href="/GetSearchLinks">Back</a>
 <br />
 <table class="table">
     <tr>
@@ -11,11 +11,11 @@
     </tr>
     @foreach (var d in Model)
     {
-        <tr>
-            <td>@d.EngineName</td>
-            <td>@d.Link</td>
-            <td>@d.Label</td>
-            <td>@d.Avaliable</td>
-        </tr>
+<tr>
+    <td>@d.EngineName</td>
+    <td>@d.Link</td>
+    <td>@d.Label</td>
+    <td>@d.Avaliable</td>
+</tr>
     }
 </table>
