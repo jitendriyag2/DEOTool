@@ -1,0 +1,21 @@
+﻿@model List<DEOTool.Controllers.LinkData>
+
+<a href="/">Back</a>
+<br />
+<table class="table">
+    <tr>
+        <th>Engine</th>
+        <th>Link</th>
+        <th>Label</th>
+        <th>Available</th>
+    </tr>
+    @foreach (var d in Model)
+    {
+        <tr>
+            <td>@d.EngineName</td>
+            <td>@d.Link</td>
+            <td>@d.Label</td>
+            <td>@d.Avaliable</td>
+        </tr>
+    }
+</table>
