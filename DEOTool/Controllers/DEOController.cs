@@ -129,10 +129,13 @@ namespace DEOTool.Controllers
 
 
             List<LinkData> links = new List<LinkData>();
-            links.AddRange(await GoogleSearch(searchVM.Keyword));
-            links.AddRange(await YahooSearch(searchVM.Keyword));
+            if (searchVM.PageNo == 1)
+                links.AddRange(await GoogleSearch(searchVM.Keyword));
+            if (searchVM.PageNo == 2)
+                links.AddRange(await YahooSearch(searchVM.Keyword));
             //links.AddRange(await BingSearch(searchVM.Keyword));
-            links.AddRange(await AskSearch(searchVM.Keyword));
+            if (searchVM.PageNo == 3)
+                links.AddRange(await AskSearch(searchVM.Keyword));
             return DownloadLinks(links);
         }
 
@@ -196,7 +199,7 @@ namespace DEOTool.Controllers
             int pageNo = 0;
             for (int i = 1; i < 20; i++)
             {
-                pageNo = (i - 1) * 10;
+                pageNo = i;
                 string AskSearchResult = await GetAskResult(AskClient, Keyword, pageNo);
                 await LinkExtractor(AskSearchResult, AskRegExString, SearchEngineName, AskLinks);
             }
@@ -232,10 +235,9 @@ namespace DEOTool.Controllers
             Regex mm = new Regex(httpFilter);
             return (mm.Match(Link).Groups[4].Value).Replace("www.", "");
         }
-
+        HttpClient linkValidationClient = new HttpClient();
         public async Task<bool> CheckLinkAvailability(string LinkUrl)
         {
-            HttpClient linkValidationClient = new HttpClient();
 
             var valOutput = await linkValidationClient.GetStringAsync($"http://jitus.in/validate.php?username={LinkUrl}");
             var val = JsonConvert.DeserializeObject<ValidationData>(valOutput);
